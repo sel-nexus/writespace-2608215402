@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { getCurrentUser } from './api/auth';
 import { Navbar } from './components/Navbar';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import Home from './pages/Home';
+import ReadBlog from './pages/ReadBlog';
+import WriteBlog from './pages/WriteBlog';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -36,6 +40,10 @@ function Application() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage onAuthenticated={authenticate} />} />
         <Route path="/register" element={<RegisterPage onAuthenticated={authenticate} />} />
+        <Route path="/blogs" element={<ProtectedRoute profile={profile}><Home /></ProtectedRoute>} />
+        <Route path="/blog/:id" element={<ProtectedRoute profile={profile}><ReadBlog profile={profile} /></ProtectedRoute>} />
+        <Route path="/write" element={<ProtectedRoute profile={profile}><WriteBlog /></ProtectedRoute>} />
+        <Route path="/edit/:id" element={<ProtectedRoute profile={profile}><WriteBlog /></ProtectedRoute>} />
       </Routes>
     </>
   );

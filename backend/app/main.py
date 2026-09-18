@@ -22,6 +22,7 @@ from app.models import User
 from app.routers.auth import router as auth_router
 from app.routers.health import router as health_router
 from app.routers.public import router as public_router
+from app.routers.posts import router as posts_router
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,30 @@ def upgrade_user_schema(engine: object) -> None:
         connection.execute(text("UPDATE users SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL"))
 
 
+def upgrade_post_schema(engine: object) -> None:
+    """Add post audit and attribution snapshot columns without dropping data."""
+    inspector = inspect(engine)
+    if "posts" not in inspector.get_table_names():
+        return
+    columns = {column["name"] for column in inspector.get_columns("posts")}
+    additions = {
+        "author_display_name": "VARCHAR(120)",
+        "author_role": "VARCHAR(20)",
+        "updated_at": "DATETIME",
+    }
+    with engine.begin() as connection:  # type: ignore[attr-defined]
+        for name, definition in additions.items():
+            if name not in columns:
+                connection.execute(text(f"ALTER TABLE posts ADD COLUMN {name} {definition}"))
+        connection.execute(text("UPDATE posts SET updated_at = created_at WHERE updated_at IS NULL"))
+        connection.execute(text("""
+            UPDATE posts
+            SET author_display_name = (SELECT display_name FROM users WHERE users.id = posts.author_id),
+                author_role = (SELECT role FROM users WHERE users.id = posts.author_id)
+            WHERE author_id IS NOT NULL AND author_display_name IS NULL
+        """))
+
+
 def create_app(settings: Settings | None = None) -> FastAPI:
     """Create a configured FastAPI application with its own database resources."""
     runtime_settings = settings or get_settings()
@@ -77,6 +102,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         """Create SQLite schema and run the restart-safe seed before serving."""
         Base.metadata.create_all(engine)
         upgrade_user_schema(engine)
+        upgrade_post_schema(engine)
         if runtime_settings.seed_on_startup:
             seed_default_admin(session_factory)
         yield
@@ -108,12 +134,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         CORSMiddleware,
         allow_origins=runtime_settings.allowed_origins,
         allow_credentials=False,
-        allow_methods=["GET", "POST"],
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
         allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
     )
     app.include_router(health_router)
     app.include_router(public_router)
     app.include_router(auth_router)
+    app.include_router(posts_router)
     return app
 
 

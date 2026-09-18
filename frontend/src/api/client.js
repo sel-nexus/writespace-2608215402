@@ -23,7 +23,7 @@ export async function requestJson(path, options = {}) {
     headers: { Accept: 'application/json', ...(body ? { 'Content-Type': 'application/json' } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     body: body ? JSON.stringify(body) : undefined,
   });
-  const payload = await response.json().catch(() => ({}));
+  const payload = response.status === 204 ? {} : await response.json().catch(() => ({}));
   if (!response.ok) {
     const error = new Error(payload.message || `The request could not be completed (${response.status}).`);
     error.status = response.status;

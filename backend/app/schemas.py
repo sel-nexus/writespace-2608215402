@@ -16,6 +16,39 @@ class PublicPostPreview(BaseModel):
     model_config = ConfigDict(from_attributes=True, extra="forbid", strict=True)
 
 
+class PostWriteInput(BaseModel):
+    """Strict editable fields accepted for a post mutation."""
+
+    title: str = Field(strict=True, min_length=1, max_length=200)
+    content: str = Field(strict=True, min_length=1, max_length=50000)
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+
+class PostAuthorOut(BaseModel):
+    """Safe author attribution for an authenticated post read."""
+
+    id: int
+    display_name: str
+    role: str
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class PostOut(BaseModel):
+    """Safe full post projection for authenticated readers."""
+
+    id: int = Field(ge=1)
+    title: str
+    content: str
+    excerpt: str
+    author: PostAuthorOut | None = None
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UserRegister(BaseModel):
     """Strict public fields accepted to create a standard user."""
 

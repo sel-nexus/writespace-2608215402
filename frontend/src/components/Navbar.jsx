@@ -16,6 +16,8 @@ export function Navbar({ profile, onLogout }) {
       <nav aria-label="Site navigation">
         {profile ? (
           <>
+            <Link className="nav-link" to="/blogs">Library</Link>
+            <Link className="nav-link" to="/write">Write</Link>
             <span className="profile-name">{profile.display_name}</span>
             <button className="nav-link" type="button" onClick={onLogout}>Log out</button>
           </>

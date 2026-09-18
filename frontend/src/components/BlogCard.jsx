@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 /**
  * Format an ISO creation timestamp into a concise editorial date.
@@ -26,6 +27,7 @@ export function BlogCard({ post }) {
       <p className="card-meta">Filed {formatDate(post.created_at)}</p>
       <h3>{post.title}</h3>
       <p>{post.excerpt}</p>
+      <Link className="text-link" to={`/blog/${post.id}`}>Read {post.title}</Link>
     </article>
   );
 }
