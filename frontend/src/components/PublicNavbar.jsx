@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 /**
  * Render the compact public navigation for the editorial landing page.
@@ -13,9 +14,9 @@ export function PublicNavbar({ onBrowse }) {
         Write<span>Space</span>
       </a>
       <nav aria-label="Public navigation">
-        <button className="nav-link" type="button" onClick={onBrowse}>
-          Latest notes
-        </button>
+        <button className="nav-link" type="button" onClick={onBrowse}>Latest notes</button>
+        <Link className="nav-link" to="/login">Log in</Link>
+        <Link className="nav-link" to="/register">Register</Link>
       </nav>
     </header>
   );

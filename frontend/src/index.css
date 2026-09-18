@@ -82,4 +82,19 @@ footer { border-top: 1px solid var(--border); color: var(--foreground-muted); di
 footer span:first-child { color: var(--foreground); font-family: var(--font-display); font-weight: 700; }
 @keyframes pulse { from { opacity: .52; } to { opacity: 1; } }
 @media (max-width: 720px) { .hero { grid-template-columns: 1fr; min-height: auto; padding-top: var(--space-8); } .hero-art { height: 285px; } .section-heading, footer { align-items: start; flex-direction: column; gap: var(--space-3); } .card-grid { grid-template-columns: 1fr; } h1 { font-size: clamp(3.1rem, 15vw, 4.8rem); } }
+.auth-nav nav { display: flex; align-items: center; gap: var(--space-4); }
+.profile-name { color: var(--foreground-muted); font-size: .92rem; }
+.session-banner { background: var(--primary-50); border-bottom: 1px solid var(--border); color: var(--primary-700); margin: 0; padding: var(--space-3) var(--space-6); text-align: center; }
+.auth-page { display: grid; min-height: calc(100vh - 84px); padding: var(--space-12) var(--space-6); place-items: start center; }
+.auth-card { background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-md); max-width: 31rem; padding: var(--space-8); width: 100%; }
+.auth-card h1 { font-size: clamp(2.8rem, 7vw, 4.5rem); }
+.auth-intro, .auth-switch { color: var(--foreground-muted); line-height: 1.5; }
+.auth-card form { display: grid; gap: var(--space-2); margin-top: var(--space-6); }
+.auth-card label { font-weight: 700; margin-top: var(--space-3); }
+.auth-card input { background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--foreground); font: inherit; min-height: 2.7rem; padding: var(--space-2) var(--space-3); }
+.auth-card input:focus { border-color: var(--ring); outline: 2px solid color-mix(in srgb, var(--ring), transparent 70%); }
+.auth-card .primary-action { justify-self: start; margin-top: var(--space-4); }
+.auth-card .primary-action:disabled { cursor: wait; opacity: .65; }
+.form-error { color: var(--error); margin: var(--space-2) 0 0; }
+.auth-switch a { color: var(--primary-700); font-weight: 700; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }

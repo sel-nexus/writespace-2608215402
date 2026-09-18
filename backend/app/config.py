@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     database_url: str = Field(alias="DATABASE_URL")
     seed_on_startup: bool = Field(default=True, alias="SEED_ON_STARTUP")
     cors_origins: str = Field(default="http://localhost:5173", alias="CORS_ORIGINS")
+    jwt_secret: str = Field(alias="JWT_SECRET")
+    jwt_expiration_minutes: int = Field(default=60, alias="JWT_EXPIRATION_MINUTES", ge=1, le=1440)
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
