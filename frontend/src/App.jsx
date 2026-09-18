@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { getCurrentUser } from './api/auth';
 import { Navbar } from './components/Navbar';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -15,6 +15,7 @@ import { clearSession, getAccessToken, getProfile, saveSession } from './utils/s
 
 function Application() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [profile, setProfile] = useState(() => getProfile());
   const [banner, setBanner] = useState('');
   useEffect(() => {
@@ -36,7 +37,7 @@ function Application() {
   function logout() { clearSession(); setProfile(null); navigate('/', { replace: true }); }
   return (
     <>
-      <Navbar profile={profile} onLogout={logout} />
+      {(location.pathname !== '/' || profile) && <Navbar profile={profile} onLogout={logout} />}
       {banner && <p className="session-banner" role="alert">{banner}</p>}
       <Routes>
         <Route path="/" element={<LandingPage />} />

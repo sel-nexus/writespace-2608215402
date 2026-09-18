@@ -9,7 +9,7 @@ RUN addgroup --system writespace && adduser --system --ingroup writespace writes
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
-RUN mkdir -p /app/data && chown -R writespace:writespace /app
-USER writespace
+COPY entrypoint.sh /usr/local/bin/writespace-entrypoint
+RUN chmod 755 /usr/local/bin/writespace-entrypoint && mkdir -p /app/data && chown -R writespace:writespace /app
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["/usr/local/bin/writespace-entrypoint"]

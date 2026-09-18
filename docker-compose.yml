@@ -6,6 +6,8 @@ services:
       DATABASE_URL: sqlite:////data/writespace.db
       SEED_ON_STARTUP: "true"
       CORS_ORIGINS: http://localhost:5173
+      JWT_SECRET: writespace-compose-development-signing-key-2026
+      JWT_EXPIRATION_MINUTES: "60"
     volumes:
       - backend_data:/data
     healthcheck:

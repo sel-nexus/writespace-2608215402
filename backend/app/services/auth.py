@@ -37,7 +37,7 @@ class AuthService:
         Raises:
             DuplicateUsernameError: If the username is already registered.
         """
-        username = payload.username.lower()
+        username = payload.username.strip().lower()
         if username == "admin" or self.users.get_by_username(session, username) is not None:
             raise DuplicateUsernameError()
         try:
@@ -62,7 +62,7 @@ class AuthService:
         Raises:
             InvalidCredentialsError: If credentials are unknown, incorrect, or inactive.
         """
-        user = self.users.get_by_username(session, username.lower())
+        user = self.users.get_by_username(session, username.strip().lower())
         password_hash = user.password_hash if user is not None else DUMMY_HASH
         valid_password = verify_password(password, password_hash)
         if user is None or not user.is_active or not valid_password:

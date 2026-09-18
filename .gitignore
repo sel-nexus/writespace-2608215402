@@ -15,3 +15,5 @@ test_report.yaml
 graphify-out/cache/
 graphify-out/graphify-out/cache/
 graphify-out/cost.json
+frontend/test-results/
+frontend/playwright-report/
