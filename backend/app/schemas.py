@@ -28,7 +28,7 @@ class PostWriteInput(BaseModel):
 class PostAuthorOut(BaseModel):
     """Safe author attribution for an authenticated post read."""
 
-    id: int
+    id: int | None
     display_name: str
     role: str
 
@@ -108,6 +108,36 @@ class UserOut(BaseModel):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True, extra="forbid")
+
+
+class UserCreate(BaseModel):
+    """Strict administrator-only fields accepted to create an account."""
+
+    display_name: str = Field(strict=True, min_length=1, max_length=120)
+    username: str = Field(strict=True, min_length=3, max_length=50)
+    password: str = Field(strict=True, min_length=8, max_length=128)
+    role: str = Field(strict=True, pattern="^(admin|user)$")
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    @field_validator("display_name")
+    @classmethod
+    def display_name_is_not_blank(cls, value: str) -> str:
+        """Reject whitespace-only administrator supplied display names."""
+        if not value.strip():
+            raise ValueError("Display name must not be blank.")
+        return value
+
+
+class AdminStatsOut(BaseModel):
+    """Server-derived administration metrics and latest safe posts."""
+
+    user_count: int = Field(ge=0)
+    active_user_count: int = Field(ge=0)
+    post_count: int = Field(ge=0)
+    recent_posts: list[PostOut]
+
+    model_config = ConfigDict(extra="forbid")
 
 
 class AuthResponse(BaseModel):

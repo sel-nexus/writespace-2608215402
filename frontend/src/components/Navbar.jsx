@@ -18,6 +18,8 @@ export function Navbar({ profile, onLogout }) {
           <>
             <Link className="nav-link" to="/blogs">Library</Link>
             <Link className="nav-link" to="/write">Write</Link>
+            {profile.role === 'admin' && <Link className="nav-link" to="/admin">Admin</Link>}
+            {profile.role === 'admin' && <Link className="nav-link" to="/users">Users</Link>}
             <span className="profile-name">{profile.display_name}</span>
             <button className="nav-link" type="button" onClick={onLogout}>Log out</button>
           </>

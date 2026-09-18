@@ -9,6 +9,8 @@ import WriteBlog from './pages/WriteBlog';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import AdminDashboard from './pages/AdminDashboard';
+import UserManagement from './pages/UserManagement';
 import { clearSession, getAccessToken, getProfile, saveSession } from './utils/session';
 
 function Application() {
@@ -44,6 +46,8 @@ function Application() {
         <Route path="/blog/:id" element={<ProtectedRoute profile={profile}><ReadBlog profile={profile} /></ProtectedRoute>} />
         <Route path="/write" element={<ProtectedRoute profile={profile}><WriteBlog /></ProtectedRoute>} />
         <Route path="/edit/:id" element={<ProtectedRoute profile={profile}><WriteBlog /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute profile={profile}><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/users" element={<ProtectedRoute profile={profile}><UserManagement /></ProtectedRoute>} />
       </Routes>
     </>
   );

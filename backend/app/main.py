@@ -23,6 +23,8 @@ from app.routers.auth import router as auth_router
 from app.routers.health import router as health_router
 from app.routers.public import router as public_router
 from app.routers.posts import router as posts_router
+from app.routers.admin import router as admin_router
+from app.routers.users import router as users_router
 
 logger = logging.getLogger(__name__)
 
@@ -134,13 +136,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         CORSMiddleware,
         allow_origins=runtime_settings.allowed_origins,
         allow_credentials=False,
-        allow_methods=["GET", "POST", "PUT", "DELETE"],
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
         allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
     )
     app.include_router(health_router)
     app.include_router(public_router)
     app.include_router(auth_router)
     app.include_router(posts_router)
+    app.include_router(admin_router)
+    app.include_router(users_router)
     return app
 
 

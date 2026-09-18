@@ -56,7 +56,7 @@ class PostReadingService:
     def _to_post_out(post: Post) -> PostOut:
         """Build the reading contract from persisted content and author snapshot."""
         author = None
-        if post.author_id is not None and post.author_display_name and post.author_role:
+        if post.author_display_name and post.author_role:
             author = PostAuthorOut(id=post.author_id, display_name=post.author_display_name, role=post.author_role)
         return PostOut(id=post.id, title=post.title, content=post.body, excerpt=PublicPostService.make_excerpt(post.body), author=author, created_at=post.created_at, updated_at=post.updated_at)
 

@@ -12,7 +12,7 @@ export function ProtectedRoute({ profile, children }) {
   if (!profile) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
-  if (location.pathname.startsWith('/admin') && profile.role !== 'admin') {
+  if ((location.pathname.startsWith('/admin') || location.pathname.startsWith('/users')) && profile.role !== 'admin') {
     return <Navigate to="/blogs" replace />;
   }
   return children;
